@@ -2,47 +2,45 @@ package com;
 
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.PostMethod;
+import org.junit.Test;
 import sun.misc.BASE64Decoder;
 
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.MalformedURLException;
 
 public class NewSign {
+    // NC IP地址
+    String NCIp = "192.168.0.115";
+    // NC 加密端口号
+    String NCPort = "7070";
+    // 签名端口号
+    String NCPort2 = "7080";
+    //是否对交易签名
+    //编码格式
+    String sCoding = "GBK";
+    //接口版本 0.0.0.1或者0.0.1.0
+    String cmpVersion = "0.0.1.0";
+    //是否大文件方式
+    String sZip = "0";
+    String sLanguage = "zh_CN";
+    //下面字段与明文xml包中保持一致
+    //包序列号与xml包中保持一致
+    String sPackageID = "11111122111211";
+    //交易代码
+    String sTransCode = "PAYPER";
+    //银行编码
+    String sBankCode = "102";
+    //集团CIS号
+    String sGroupCIS = "110290001987990";
+    //证书ID
+    String sID = "FangYQHL191224.y.1102";
 
-    public static void main(String[] args) throws Exception {
-
-        // NC IP地址
-        String NCIp = "192.168.0.115";
-        // NC 加密端口号
-        String NCPort = "7070";
-        // 签名端口号
-        String NCPort2 = "7080";
-        //是否对交易签名
-        boolean signatureflg = true;
-        //String retcertPath = "C:\\Users\\11150\\Documents\\NC3\\FangYQHL191224.pfx";//工行公钥 admin.crt所在路径
-
+    @Test
+    public void test() {
         try {
-            //编码格式
-            String sCoding = "GBK";
-            //接口版本 0.0.0.1或者0.0.1.0
-            String cmpVersion = "0.0.1.0";
-            //是否大文件方式
-            String sZip = "0";
-            String sLanguage = "zh_CN";
-            //下面字段与明文xml包中保持一致
-            //包序列号与xml包中保持一致
-            String sPackageID = "11111122211";
-            //交易代码
-            String sTransCode = "PAYPER";
-            //银行编码
-            String sBankCode = "102";
-            //集团CIS号
-            String sGroupCIS = "110290001987990";
-            //证书ID
-            String sID = "FangYQHL191224.y.1102";
-
             //提交类报文明文xml包
             String sContentSign = "<?xml version=\"1.0\" encoding = \"GBK\"?>\n" +
                     "\t<CMS>\n" +
@@ -54,14 +52,14 @@ public class NewSign {
                     "\t\t\t\t<ID>FangYQHL191224.y.1102</ID>\t\n" +
                     "\t\t\t\t<TranDate>20200701</TranDate>\n" +
                     "\t\t\t\t<TranTime>151511234</TranTime>\n" +
-                    "\t\t\t\t<fSeqno>11111122211</fSeqno>\n" +
+                    "\t\t\t\t<fSeqno>11111122111211</fSeqno>\n" +
                     "\t\t\t</pub>\n" +
                     "\t\t\t<in>\n" +
                     "\t\t\t\t<OnlBatF>1</OnlBatF>\n" +
                     "\t\t\t\t<SettleMode>2</SettleMode>\n" +
                     "\t\t\t\t<TotalNum>2</TotalNum>\n" +
                     "\t\t\t\t<TotalAmt>2</TotalAmt>\n" +
-                    "\t\t\t\t<SignTime>20200701163911234</SignTime>\n" +
+                    "\t\t\t\t<SignTime>20200701171811234</SignTime>\n" +
                     "\t\t\t\t<THBaseAccFlag>0</THBaseAccFlag>\n" +
                     "\t\t\t\t<RegSerialNO></RegSerialNO>\t\n" +
                     "\t\t\t\t<PackageName></PackageName>\n" +
@@ -144,99 +142,9 @@ public class NewSign {
                     "\t\t\t</in>\n" +
                     "\t\t</eb>\n" +
                     "</CMS>";
-            //NCPort2 签名端口号
-            java.net.URL aURL = new java.net.URL("http://" + NCIp + ":" + NCPort2);
-            //打开和URL之间的连接
-            java.net.HttpURLConnection urlConnection = (java.net.HttpURLConnection) aURL.openConnection();
-
-            urlConnection.setRequestMethod("POST");
-            urlConnection.setDoInput(true);
-            urlConnection.setDoOutput(true);
-            urlConnection.setUseCaches(false);
-            //设置通用的请求属性
-            urlConnection.setRequestProperty("Content-Length", String.valueOf(sContentSign.getBytes(sCoding).length));
-            urlConnection.setRequestProperty("Content-Type", "INFOSEC_SIGN/1.0");
-//            System.out.println(new String(sContentSign, ));
-            BufferedOutputStream out = new BufferedOutputStream(urlConnection.getOutputStream());
-            out.write(sContentSign.getBytes(sCoding));
-            out.flush();
-            out.close();
-
-            int responseCode = urlConnection.getResponseCode();
-            if (responseCode != 200) {
-                System.out.println("NC  failed");
-            }
-            //NC签名结果
-            String resM = urlConnection.getResponseMessage();
-
-            StringBuffer repContent = new StringBuffer();
-            InputStreamReader in = new InputStreamReader(urlConnection.getInputStream());
-            BufferedReader bufferedReader = new BufferedReader(in);
-
-            String readLine = null;
-            while ((readLine = bufferedReader.readLine()) != null) {
-                repContent.append(readLine);
-            }
-            in.close();
-            urlConnection.disconnect();
-
-            int beginSign = 0;
-            int endSign = 0;
-            try {
-
-                beginSign = repContent.indexOf("<sign>") + 6;
-                endSign = repContent.indexOf("</sign>");
-            } catch (Exception e) {
-                System.out.println("！！！！！！！！！！please check NC set！！！！！！！！！！");
-            }
-
-            String repSignContent = repContent.substring(beginSign, endSign);
-            System.out.println("repSignContent=="+repSignContent);
-
-            String urlStr1 = "http://" + NCIp + ":" + NCPort + "/servlet/ICBCCMPAPIReqServlet?PackageID=" + sPackageID + "&SendTime=" + QueryDataUtil.getTimeString();
-            //构建http客户端
-            HttpClient myClient = new HttpClient();
-            //加密端口
-            PostMethod myPost = new PostMethod(urlStr1);
-
-            myPost.setRequestHeader("Content-Type", "application/x-www-form-urlencoded; charset=GBK");
-
-            myPost.addParameter("Version", cmpVersion);
-            myPost.addParameter("TransCode", sTransCode);
-            myPost.addParameter("BankCode", sBankCode);
-            myPost.addParameter("GroupCIS", sGroupCIS);
-            myPost.addParameter("ID", sID);
-            myPost.addParameter("PackageID", sPackageID);
-//            myPost.addParameter("Cert", "");
-            myPost.addParameter("Language", sLanguage);
-            myPost.addParameter("zipFlag", sZip);
-
-            myPost.addParameter("reqData", repSignContent);
-
-            System.out.println("start send jiami..." + System.currentTimeMillis());
-            //获得http返回码
-            int returnFlag = myClient.executeMethod(myPost);
-
-            try {
-                String postResult = myPost.getResponseBodyAsString();
-                if (postResult.startsWith("reqData=")) {
-                    postResult = postResult.substring(8);
-                }
-                System.out.println("******************************NC back******************************\n");
-                System.out.println(new String(postResult));
-
-                byte[] decodeResult = getFromBASE64(postResult);
-                String sysout = new String(decodeResult, sCoding);
-
-                System.out.println("******************************back data******************************\n");
-                System.out.println(sysout);
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            // 释放http连接
-            myPost.releaseConnection();
-
+            String repSignContent = Signature(sContentSign.toString());
+            String sysout = DirectiveSubmission("PAYPER", repSignContent);
+            System.out.println(sysout);
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -248,7 +156,7 @@ public class NewSign {
         }
     }
 
-    public static byte[] getFromBASE64(String s) {
+    public byte[] getFromBASE64(String s) {
         if (s == null) {
             return null;
         }
@@ -258,5 +166,96 @@ public class NewSign {
         } catch (Exception e) {
             return null;
         }
+    }
+
+    public String Signature(String sContentSign) throws Exception {
+        java.net.URL aURL = new java.net.URL("http://" + NCIp + ":" + NCPort2);
+        //打开和URL之间的连接
+        java.net.HttpURLConnection urlConnection = (java.net.HttpURLConnection) aURL.openConnection();
+
+        urlConnection.setRequestMethod("POST");
+        urlConnection.setDoInput(true);
+        urlConnection.setDoOutput(true);
+        urlConnection.setUseCaches(false);
+        //设置通用的请求属性
+        urlConnection.setRequestProperty("Content-Length", String.valueOf(sContentSign.getBytes(sCoding).length));
+        urlConnection.setRequestProperty("Content-Type", "INFOSEC_SIGN/1.0");
+        BufferedOutputStream out = new BufferedOutputStream(urlConnection.getOutputStream());
+        out.write(sContentSign.getBytes(sCoding));
+        out.flush();
+        out.close();
+
+        int responseCode = urlConnection.getResponseCode();
+        if (responseCode != 200) {
+            System.out.println("NC  failed");
+        }
+        //NC签名结果
+        String resM = urlConnection.getResponseMessage();
+
+        StringBuffer repContent = new StringBuffer();
+        InputStreamReader in = new InputStreamReader(urlConnection.getInputStream());
+        BufferedReader bufferedReader = new BufferedReader(in);
+
+        String readLine = null;
+        while ((readLine = bufferedReader.readLine()) != null) {
+            repContent.append(readLine);
+        }
+        in.close();
+        urlConnection.disconnect();
+
+        int beginSign = 0;
+        int endSign = 0;
+        try {
+            beginSign = repContent.indexOf("<sign>") + 6;
+            endSign = repContent.indexOf("</sign>");
+        } catch (Exception e) {
+            System.out.println("！！！！！！！！！！please check NC set！！！！！！！！！！");
+        }
+        String repSignContent = repContent.substring(beginSign, endSign);
+        //System.out.println(repSignContent);
+        return repSignContent;
+    }
+
+    public String DirectiveSubmission(String sTransCode, String repSignContent) throws IOException {
+
+        String urlStr1 = "http://" + NCIp + ":" + NCPort + "/servlet/ICBCCMPAPIReqServlet?PackageID=" + sPackageID + "&SendTime=" + QueryDataUtil.getTimeString();
+        //构建http客户端
+        HttpClient myClient = new HttpClient();
+        //加密端口
+        PostMethod myPost = new PostMethod(urlStr1);
+        myPost.setRequestHeader("Content-Type", "application/x-www-form-urlencoded; charset=GBK");
+        myPost.addParameter("Version", cmpVersion);
+        myPost.addParameter("TransCode", sTransCode);
+        myPost.addParameter("BankCode", sBankCode);
+        myPost.addParameter("GroupCIS", sGroupCIS);
+        myPost.addParameter("ID", sID);
+        myPost.addParameter("PackageID", sPackageID);
+//            myPost.addParameter("Cert", "");
+        myPost.addParameter("Language", sLanguage);
+        myPost.addParameter("zipFlag", sZip);
+
+        myPost.addParameter("reqData", repSignContent);
+
+        System.out.println("start send jiami..." + System.currentTimeMillis());
+        //获得http返回码
+        int returnFlag = myClient.executeMethod(myPost);
+
+        try {
+            String postResult = myPost.getResponseBodyAsString();
+            if (postResult.startsWith("reqData=")) {
+                postResult = postResult.substring(8);
+            }
+            System.out.println("******************************NC back******************************\n");
+            System.out.println(new String(postResult));
+
+            byte[] decodeResult = getFromBASE64(postResult);
+            String sysout = new String(decodeResult, sCoding);
+            return sysout;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        // 释放http连接
+        myPost.releaseConnection();
+        return null;
     }
 }

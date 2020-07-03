@@ -432,7 +432,6 @@ public class BanksLinkEnterprises {
 
     /**
      * 企业财务指令查询方法
-     *
      * @return
      */
     public String enterprisesFinancialInstructionQueery(String qryfSeqno, String qrySerialNo) {
@@ -455,15 +454,12 @@ public class BanksLinkEnterprises {
         } else {
             sContent.append("<QrySerialNo>").append(qrySerialNo).append("</QrySerialNo>");
         }
-        //sContent.append("<QrySerialNo>").append("CMN750958315").append("</QrySerialNo>");
         sContent.append("</in></eb></CMS>");
 
         StringBuilder urlStr = new StringBuilder();
         urlStr.append("http://").append(NCIp).append(":").append(NCPort).append("/servlet/ICBCCMPAPIReqServlet?PackageID=").append(sPackageID)
                 .append("&SendTime=").append(getTimeString());
         try {
-
-
             /**
              * 构建http客户端
              */
@@ -502,9 +498,8 @@ public class BanksLinkEnterprises {
 
     }
 
-    @Test
-    public void test3() {
-        //System.out.println(enterprisesFinancialInstructionQueery());
+    public String Signature(){
+        return null;
     }
 
 
