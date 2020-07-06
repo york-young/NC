@@ -205,7 +205,6 @@ public class NCExample {
             int beginSign = 0;
             int endSign = 0;
             try {
-
                 beginSign = repContent.indexOf("<sign>") + 6;
                 endSign = repContent.indexOf("</sign>");
             } catch (Exception e) {
