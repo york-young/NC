@@ -21,9 +21,6 @@ public class NCExample {
         String NCPort = "7070";
         // 签名端口号
         String NCPort2 = "7080";
-        //是否对交易签名
-        boolean signatureflg = true;
-        //String retcertPath = "C:\\Users\\11150\\Documents\\NC3\\FangYQHL191224.pfx";//工行公钥 admin.crt所在路径
 
         try {
             //编码格式
@@ -154,7 +151,6 @@ public class NCExample {
                     "                        <MCardNo></MCardNo>  " +
                     "                        <MCardName></MCardName>  " +
                     "                       </rd>" );
-
              sContentSign.append("</in></eb></CMS>");       
                     
             //NCPort2 签名端口号
@@ -188,6 +184,7 @@ public class NCExample {
             out.close();
 
             int responseCode = urlConnection.getResponseCode();
+
             if (responseCode != 200) {
                 System.out.println("NC  failed");
             }
@@ -232,18 +229,22 @@ public class NCExample {
             myPost.addParameter("GroupCIS", sGroupCIS);
             myPost.addParameter("ID", sID);
             myPost.addParameter("PackageID", sPackageID);
-//            myPost.addParameter("Cert", "");
+            myPost.addParameter("Cert", "");
             myPost.addParameter("Language", sLanguage);
             myPost.addParameter("zipFlag", sZip);
-
             myPost.addParameter("reqData", repSignContent);
 
             System.out.println("start send jiami..." + System.currentTimeMillis());
             //获得http返回码
+            System.out.println(myClient);
+
             int returnFlag = myClient.executeMethod(myPost);
+
+            System.out.println(returnFlag);
 
             try {
                 String postResult = myPost.getResponseBodyAsString();
+                System.out.println("postResult"+postResult);
                 if (postResult.startsWith("reqData=")) {
                     postResult = postResult.substring(8);
                 }

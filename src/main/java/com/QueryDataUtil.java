@@ -113,9 +113,6 @@ public class QueryDataUtil {
         urlStr.append("http://").append(NCIp).append(":").append(NCPort).append("/servlet/ICBCCMPAPIReqServlet?PackageID=")
                 .append("1111111").append("&SendTime=").append(getTimeString());
         try {
-            /**
-             * 构建http客户端
-             */
             HttpClient client = new HttpClient();
             PostMethod post = new PostMethod(urlStr.toString());
             post.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=GBK");
@@ -152,7 +149,6 @@ public class QueryDataUtil {
         }
         return null;
     }
-
     /**
      * 获取头部交易指令返回码
      *
