@@ -145,14 +145,10 @@ public class NewSign {
             String repSignContent = Signature(sContentSign.toString());
             String sysout = DirectiveSubmission("PAYPER", repSignContent);
             System.out.println(sysout);
-
         } catch (IOException e) {
             e.printStackTrace();
-            e.printStackTrace(System.out);
         } catch (Exception e) {
             e.printStackTrace();
-            e.printStackTrace(System.out);
-            System.err.println("error:" + e.getMessage());
         }
     }
 
