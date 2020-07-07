@@ -302,15 +302,17 @@ public class BanksLinkEnterprises {
         in.close();
         urlConnection.disconnect();
 
-        int beginSign = 0;
-        int endSign = 0;
+        /*int beginSign = 0;
+        int endSign = 0;*/
+        String repSignContent = null;
         try {
-            beginSign = repContent.indexOf("<sign>") + 6;
-            endSign = repContent.indexOf("</sign>");
+            /*beginSign = repContent.indexOf("<sign>") + 6;
+            endSign = repContent.indexOf("</sign>");*/
+            repSignContent = repContent.toString().split("<sign>")[1].split("</sign>")[0];
         } catch (Exception e) {
             System.out.println("！！！！！！！！！！please check NC set！！！！！！！！！！");
         }
-        String repSignContent = repContent.substring(beginSign, endSign);
+        /*String repSignContent = repContent.substring(beginSign, endSign);*/
         return repSignContent;
     }
 
