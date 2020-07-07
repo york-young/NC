@@ -32,7 +32,7 @@ public class NCExample {
             String sLanguage = "zh_CN";
             //下面字段与明文xml包中保持一致
             //包序列号与xml包中保持一致
-            String sPackageID = "22222221111111";
+            String sPackageID = "22222221222111111";
             //交易代码
             String sTransCode = "PAYENT";
             //银行编码
@@ -54,14 +54,14 @@ public class NCExample {
                     "                       <ID>FangYQHL191224.y.1102</ID>  " +
                     "                       <TranDate>20200701</TranDate> " +
                     "                       <TranTime>131508123</TranTime>  " +
-                    "                       <fSeqno>22222221111111</fSeqno>  " +
+                    "                       <fSeqno>22222221222111111</fSeqno>  " +
                     "                      </pub>  " +
                     "                      <in>  " +
                     "                       <OnlBatF>1</OnlBatF>  " +
                     "                       <SettleMode>0</SettleMode>  " +
                     "                       <TotalNum>2</TotalNum>  " +
                     "                       <TotalAmt>2</TotalAmt>  " +
-                    "                       <SignTime>20200701170208123</SignTime>  " +
+                    "                       <SignTime>20200702171008123</SignTime>  " +
                     "                       <ReqReserved1></ReqReserved1>  " +
                     "                       <ReqReserved2></ReqReserved2>");
 

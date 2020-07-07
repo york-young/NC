@@ -11,6 +11,7 @@ import java.util.Random;
 
 /**
  * 获取一些特定的日期和数据的工具类
+ *
  * @author York
  */
 
@@ -34,7 +35,7 @@ public class QueryDataUtil {
     //public static String sPackageID = queryDateUtil()+getRandom(18);
     //支付指令提交交易码
     public static String sTransCodePAYENT = "PAYENT";
-    //高级新多账户余额查询交易码
+    //多账户余额查询交易码
     public static String sTransCodeQACCBAL = "QACCBAL";
     //支付指令查询交易码
     public static String sTransCodeQPAYENT = "QPAYENT";
@@ -94,17 +95,17 @@ public class QueryDataUtil {
     }
 
     /**
-     * @Description:
-     *             获取银行的工作日期，为了获取签名的时间
+     * 获取银行的工作日期，为了获取签名的时间
+     *
      * @Author: York
-     * @Date: 2020/7/3 13:26
-     * @param
+     * @Date: 2020/7/3 10:48
+     * @Param: []
      * @Return: java.lang.String
      **/
     public static String queryDateUtil() {
         StringBuilder sContent = new StringBuilder();
-        sContent.append("<?xml version=\"1.0\" encoding = \"GBK\"?><CMS><eb><pub>").append("<TransCode>").append(sTransCodeQACCBAL).append("</TransCode>")
-                .append(" <CIS>").append(sGroupCIS).append("</CIS>").append("<BankCode>").append(sBankCode).append("</BankCode>").append("<ID>").append(sID).append("</ID> ")
+        sContent.append("<?xml version=\"1.0\" encoding = \"GBK\"?><CMS><eb><pub>").append("<TransCode>").append("QACCBAL").append("</TransCode>")
+                .append(" <CIS>").append("110290001987990").append("</CIS>").append("<BankCode>").append("102").append("</BankCode>").append("<ID>").append("FangYQHL191224.y.1102").append("</ID> ")
                 .append("<TranDate>").append(getSendDate()).append("</TranDate> ").append("<TranTime>").append(getSendTime()).append("</TranTime>")
                 .append("<fSeqno>").append("1111111").append("</fSeqno></pub><in>").append("<TotalNum>1</TotalNum><BLFlag></BLFlag><SynFlag></SynFlag>")
                 .append("<rd><iSeqno>1111</iSeqno><AccNo>1102021929000036344</AccNo><CurrType>001</CurrType><ReqReserved3></ReqReserved3><AcctSeq></AcctSeq><MainAcctNo></MainAcctNo></rd> ")
@@ -117,10 +118,10 @@ public class QueryDataUtil {
             PostMethod post = new PostMethod(urlStr.toString());
             post.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=GBK");
             post.addParameter("Version", cmpVersion);
-            post.addParameter("TransCode", sTransCodeQACCBAL);
-            post.addParameter("BankCode", sBankCode);
-            post.addParameter("GroupCIS", sGroupCIS);
-            post.addParameter("ID", sID);
+            post.addParameter("TransCode", "QACCBAL");
+            post.addParameter("BankCode", "102");
+            post.addParameter("GroupCIS", "110290001987990");
+            post.addParameter("ID", "FangYQHL191224.y.1102");
             post.addParameter("PackageID", "1111111");
             post.addParameter("Cert", "");
             post.addParameter("Language", sLanguage);
@@ -149,6 +150,7 @@ public class QueryDataUtil {
         }
         return null;
     }
+
     /**
      * 获取头部交易指令返回码
      *

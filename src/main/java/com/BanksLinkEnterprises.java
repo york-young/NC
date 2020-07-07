@@ -17,18 +17,16 @@ import static com.QueryDataUtil.getTimeString;
  */
 
 public class BanksLinkEnterprises {
-
-    String sPackageID = queryDateUtil() + getRandom(18);
-
     /**
      * 单笔指令操作提交测试
      */
     @Test
     public void test1() {
+
         String sysout = payInstructionSubmission();
-        System.out.println(sysout);
+        //System.out.println(sysout);
         if ("0".equals(getRetCode(sysout))) {
-            System.out.println("指令上送成功了");
+            //System.out.println("指令上送成功了");
             //payInstructionQuery(getQryfSeqno(sysout), getQrySerialNo(sysout));
             int result = Integer.valueOf(getResult(sysout));
             if (result == 7) {
@@ -50,15 +48,17 @@ public class BanksLinkEnterprises {
     @Test
     public void test2() {
         String sysout = enterpriseFinanceDirectiveSubmission();
-        System.out.println("sysout" + sysout);
+        //System.out.println("sysout" + sysout);
         if ("0".equals(getRetCode(sysout))) {
-            System.out.println("指令上送成功了");
-/*            String serialNo = getSerialNo(sysout);
+            //System.out.println("指令上送成功了");
+            String serialNo = getSerialNo(sysout);
             String fSeqno = getfSeqno(sysout);
-            String sys = enterprisesFinancialInstructionQueery(fSeqno, serialNo);
-            System.out.println(sys);
+            String sys = enterprisesFinancialInstructionQuery(fSeqno, serialNo);
+            //System.out.println("sys=============="+sys);
+            String retCode = getRetCode(sys);
+            //System.out.println("retCode=="+retCode);
 
-            int result = Integer.valueOf(getResult(sys));
+            int result = Integer.parseInt(getResult(sys));
             if (result == 7) {
                 System.out.println("实付金额：" + getTotalAmt(sys));
 
@@ -66,13 +66,12 @@ public class BanksLinkEnterprises {
                 System.out.println("实付金额：0");
                 System.out.println(getIRetCode(sys) + getIRetMsg(sys));
             } else {
-                payInstructionQuery(getQryfSeqno(sys), getQrySerialNo(sys));
-            }*/
+                //System.out.println("测试结果");
+                System.out.println(enterprisesFinancialInstructionQuery(getQryfSeqno(sys), getQrySerialNo(sys)));
+            }
         } else {
             System.out.println("指令上送失败了:" + getRetCode(sysout) + getRetMsg(sysout));
         }
-
-
     }
 
     /**
@@ -90,7 +89,6 @@ public class BanksLinkEnterprises {
             String totalNum = "1";
             String totalAmt = "1";
             String payAmt = "1";
-
             String payType = "1";
             String sysIOFlg = "1";
             String sPackageID = QueryDataUtil.getTimeString() + getRandom(18);
@@ -117,7 +115,7 @@ public class BanksLinkEnterprises {
                     .append("<RecAccNameCN>").append(recAccNameCN).append("</RecAccNameCN> <RecAccNameEN></RecAccNameEN> ")
                     .append("<SysIOFlg>").append(sysIOFlg).append("</SysIOFlg>").append("<IsSameCity></IsSameCity><Prop></Prop>")
                     .append("<RecICBCCode></RecICBCCode><RecCityName></RecCityName><RecBankNo></RecBankNo><RecBankName></RecBankName>")
-                    .append("<CurrType>001</CurrType><PayAmt>").append(payAmt).append("</PayAmt><UseCode></UseCode><UseCN></UseCN><EnSummary></EnSummary>")
+                    .append("<CurrType>001</CurrType><PayAmt>").append(payAmt).append("</PayAmt><UseCode></UseCode><UseCN>福利费</UseCN><EnSummary></EnSummary>")
                     .append("<PostScript></PostScript><Summary></Summary><Ref></Ref><Oref></Oref><ERPSqn></ERPSqn><BusCode></BusCode>")
                     .append("<ERPcheckno></ERPcheckno><CrvouhType></CrvouhType><CrvouhName></CrvouhName><CrvouhNo></CrvouhNo><BankType></BankType>")
                     .append("<FileNames></FileNames><Indexs></Indexs><PaySubNo></PaySubNo><RecSubNo></RecSubNo><MCardNo></MCardNo><MCardName></MCardName></rd>");
@@ -125,8 +123,9 @@ public class BanksLinkEnterprises {
             sContentSign.append("</in></eb></CMS>");
             //调用签名方法对数据进行签名
             String repSignContent = Signature(sContentSign.toString());
+            //System.out.println(repSignContent);
             //提交并返回结果
-            return directiveSubmission(sTransCodePAYENT, repSignContent);
+            return directiveSubmission(sPackageID, sTransCodePAYENT, repSignContent);
         } catch (IOException e) {
             e.printStackTrace();
             e.printStackTrace(System.out);
@@ -141,8 +140,11 @@ public class BanksLinkEnterprises {
     /**
      * 企业财务室指令提交方法
      *
-     * @return
-     */
+     * @Author: York
+     * @Date: 2020/7/7 9:41
+     * @Param: []
+     * @Return: java.lang.String
+     **/
     public String enterpriseFinanceDirectiveSubmission() {
         String totalNum = "2";
         String totalAmt = "2";
@@ -154,7 +156,8 @@ public class BanksLinkEnterprises {
         String recAccNameCN1 = "强貌坡迄匆末魏输移氯樱圾婆桂迄";
         String currType = "001";
         String payAmt = "1";
-        String useCN = "用途中文描述";
+        String useCN = "福利费";
+        String sPackageID = QueryDataUtil.getTimeString() + getRandom(18);
         try {
             String sTransCodePAYPER = "PAYPER";
             StringBuilder sContentSign = new StringBuilder();
@@ -171,7 +174,7 @@ public class BanksLinkEnterprises {
                     .append("<StartDate></StartDate><StartTime></StartTime><PayType>1</PayType>")
                     .append("<PayAccNo>").append(payAccNo).append("</PayAccNo>").append("<PayAccNameCN>").append(payAccNameCN).append("</PayAccNameCN><PayAccNameEN></PayAccNameEN>")
                     .append("<RecAccNo>").append(recAccNo).append("</RecAccNo>").append("<RecAccNameCN>").append(recAccNameCN).append("</RecAccNameCN><RecAccNameEN></RecAccNameEN>")
-                    .append("<SysIOFlg></SysIOFlg><IsSameCity></IsSameCity><RecICBCCode></RecICBCCode><RecCityName></RecCityName><RecBankNo></RecBankNo><RecBankName></RecBankName>")
+                    .append("<SysIOFlg>1</SysIOFlg><IsSameCity></IsSameCity><RecICBCCode></RecICBCCode><RecCityName></RecCityName><RecBankNo></RecBankNo><RecBankName></RecBankName>")
                     .append("<CurrType>").append(currType).append("</CurrType>").append("<PayAmt>").append(payAmt).append("</PayAmt><UseCode></UseCode>")
                     .append("<UseCN>").append(useCN).append("</UseCN>").append("<EnSummary></EnSummary><PostScript></PostScript><Summary></Summary><Ref></Ref>")
                     .append("<Oref>1</Oref><ERPSqn></ERPSqn><BusCode></BusCode><ERPcheckno></ERPcheckno><CrvouhType></CrvouhType><CrvouhName></CrvouhName>")
@@ -181,7 +184,7 @@ public class BanksLinkEnterprises {
                     .append("<StartDate></StartDate><StartTime></StartTime><PayType>1</PayType>")
                     .append("<PayAccNo>").append(payAccNo).append("</PayAccNo>").append("<PayAccNameCN>").append(payAccNameCN).append("</PayAccNameCN><PayAccNameEN></PayAccNameEN>")
                     .append("<RecAccNo>").append(recAccNo1).append("</RecAccNo>").append("<RecAccNameCN>").append(recAccNameCN1).append("</RecAccNameCN><RecAccNameEN></RecAccNameEN>")
-                    .append("<SysIOFlg></SysIOFlg><IsSameCity></IsSameCity><RecICBCCode></RecICBCCode><RecCityName></RecCityName><RecBankNo></RecBankNo><RecBankName></RecBankName>")
+                    .append("<SysIOFlg>1</SysIOFlg><IsSameCity></IsSameCity><RecICBCCode></RecICBCCode><RecCityName></RecCityName><RecBankNo></RecBankNo><RecBankName></RecBankName>")
                     .append("<CurrType>").append(currType).append("</CurrType>").append("<PayAmt>").append(payAmt).append("</PayAmt><UseCode></UseCode>")
                     .append("<UseCN>").append(useCN).append("</UseCN>").append("<EnSummary></EnSummary><PostScript></PostScript><Summary></Summary><Ref></Ref>")
                     .append("<Oref>1</Oref><ERPSqn></ERPSqn><BusCode></BusCode><ERPcheckno></ERPcheckno><CrvouhType></CrvouhType><CrvouhName></CrvouhName>")
@@ -189,7 +192,7 @@ public class BanksLinkEnterprises {
 
             sContentSign.append("</in></eb></CMS>");
             String repSignContent = Signature(sContentSign.toString());
-            return directiveSubmission(sTransCodePAYPER, repSignContent);
+            return directiveSubmission(sPackageID, sTransCodePAYPER, repSignContent);
         } catch (IOException e) {
             e.printStackTrace();
             e.printStackTrace(System.out);
@@ -210,6 +213,7 @@ public class BanksLinkEnterprises {
      * @Return: java.lang.String
      **/
     public String payQuery(String sTransCode, String qryfSeqno, String qrySerialNo) {
+        String sPackageID = QueryDataUtil.getTimeString() + getRandom(18);
         StringBuilder sContent = new StringBuilder();
         sContent.append("<?xml version=\"1.0\" encoding = \"GBK\"?><CMS><eb><pub>")
                 .append("<TransCode>").append(sTransCode).append("</TransCode>")
@@ -218,7 +222,7 @@ public class BanksLinkEnterprises {
                 .append("<ID>").append(sID).append("</ID>")
                 .append("<TranDate>").append(queryDateUtil()).append("</TranDate> ")
                 .append("<TranTime>").append(getSendTime()).append("</TranTime> ")
-                .append("<fSeqno>").append(getTimeString()).append("</fSeqno>").append("</pub><in> ");
+                .append("<fSeqno>").append(sPackageID).append("</fSeqno>").append("</pub><in> ");
         if (null == qryfSeqno) {
             sContent.append("<QryfSeqno>").append("</QryfSeqno>");
         } else {
@@ -232,7 +236,7 @@ public class BanksLinkEnterprises {
         sContent.append("</in></eb></CMS>");
 
         try {
-            return directiveSubmission(sTransCode, sContent.toString());
+            return directiveSubmission(sPackageID, sTransCode, sContent.toString());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -301,18 +305,12 @@ public class BanksLinkEnterprises {
         }
         in.close();
         urlConnection.disconnect();
-
-        /*int beginSign = 0;
-        int endSign = 0;*/
         String repSignContent = null;
         try {
-            /*beginSign = repContent.indexOf("<sign>") + 6;
-            endSign = repContent.indexOf("</sign>");*/
             repSignContent = repContent.toString().split("<sign>")[1].split("</sign>")[0];
         } catch (Exception e) {
-            System.out.println("！！！！！！！！！！please check NC set！！！！！！！！！！");
+            e.printStackTrace();
         }
-        /*String repSignContent = repContent.substring(beginSign, endSign);*/
         return repSignContent;
     }
 
@@ -324,7 +322,7 @@ public class BanksLinkEnterprises {
      * @Param: [sTransCode, repSignContent]
      * @Return: java.lang.String
      **/
-    public String directiveSubmission(String sTransCode, String repSignContent) throws IOException {
+    public String directiveSubmission(String sPackageID, String sTransCode, String repSignContent) {
         String urlStr1 = "http://" + NCIp + ":" + NCPort + "/servlet/ICBCCMPAPIReqServlet?PackageID=" + sPackageID + "&SendTime=" + QueryDataUtil.getTimeString();
         //构建http客户端
         HttpClient myClient = new HttpClient();
@@ -342,20 +340,15 @@ public class BanksLinkEnterprises {
         myPost.addParameter("zipFlag", sZip);
         myPost.addParameter("reqData", repSignContent);
 
-        //System.out.println("start send jiami..." + System.currentTimeMillis());
-        //获得http返回码
-        int returnFlag = myClient.executeMethod(myPost);
-
         try {
+            //获得http返回码
+            int returnFlag = myClient.executeMethod(myPost);
             String postResult = myPost.getResponseBodyAsString();
             if (postResult.startsWith("reqData=")) {
                 postResult = postResult.substring(8);
             }
-            /*System.out.println("******************************NC back******************************\n");
-            System.out.println(new String(postResult));*/
             byte[] decodeResult = getFromBASE64(postResult);
-            String sysout = new String(decodeResult, sCoding);
-            return sysout;
+            return new String(decodeResult, sCoding);
         } catch (Exception e) {
             e.printStackTrace();
         }
