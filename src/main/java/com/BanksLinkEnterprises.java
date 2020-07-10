@@ -10,7 +10,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 import static com.QueryDataUtil.*;
-import static com.QueryDataUtil.getTimeString;
 
 /**
  * @author York
@@ -24,15 +23,11 @@ public class BanksLinkEnterprises {
     public void test1() {
 
         String sysout = payInstructionSubmission();
-        //System.out.println(sysout);
         if ("0".equals(getRetCode(sysout))) {
-            //System.out.println("指令上送成功了");
-            //payInstructionQuery(getQryfSeqno(sysout), getQrySerialNo(sysout));
             int result = Integer.valueOf(getResult(sysout));
             if (result == 7) {
                 System.out.println("实付金额：" + getTotalAmt(sysout));
             } else if (result == 6 || result == 8) {
-                System.out.println("实付金额：0");
                 System.out.println(getIRetCode(sysout) + getIRetMsg(sysout));
             } else {
                 payInstructionQuery(getQryfSeqno(sysout), getQrySerialNo(sysout));
@@ -48,15 +43,12 @@ public class BanksLinkEnterprises {
     @Test
     public void test2() {
         String sysout = enterpriseFinanceDirectiveSubmission();
-        //System.out.println("sysout" + sysout);
+
         if ("0".equals(getRetCode(sysout))) {
-            //System.out.println("指令上送成功了");
             String serialNo = getSerialNo(sysout);
             String fSeqno = getfSeqno(sysout);
             String sys = enterprisesFinancialInstructionQuery(fSeqno, serialNo);
-            //System.out.println("sys=============="+sys);
             String retCode = getRetCode(sys);
-            //System.out.println("retCode=="+retCode);
 
             int result = Integer.parseInt(getResult(sys));
             if (result == 7) {
@@ -66,7 +58,6 @@ public class BanksLinkEnterprises {
                 System.out.println("实付金额：0");
                 System.out.println(getIRetCode(sys) + getIRetMsg(sys));
             } else {
-                //System.out.println("测试结果");
                 System.out.println(enterprisesFinancialInstructionQuery(getQryfSeqno(sys), getQrySerialNo(sys)));
             }
         } else {

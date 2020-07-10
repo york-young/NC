@@ -9,7 +9,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-public class Sign {
+public class PayCommit {
 
     public static void main(String[] args) throws Exception {
 
@@ -33,7 +33,7 @@ public class Sign {
             String sLanguage = "zh_CN";
             //下面字段与明文xml包中保持一致
             //包序列号与xml包中保持一致
-            String sPackageID = "11111111111111";
+            String sPackageID = "1111145111111111";
             //交易代码
             String sTransCode = "PAYENT";
             //银行编码
@@ -61,7 +61,7 @@ public class Sign {
                     "                       <SettleMode>0</SettleMode>  \n" +
                     "                       <TotalNum>1</TotalNum>  \n" +
                     "                       <TotalAmt>1</TotalAmt>  \n" +
-                    "                       <SignTime>20200701092008123</SignTime>  \n" +
+                    "                       <SignTime>20200702112808123</SignTime>  \n" +
                     "                       <ReqReserved1></ReqReserved1>  \n" +
                     "                       <ReqReserved2></ReqReserved2>  \n" +
                     "                       <rd>  \n" +
