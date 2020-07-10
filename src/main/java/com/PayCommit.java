@@ -33,7 +33,7 @@ public class PayCommit {
             String sLanguage = "zh_CN";
             //下面字段与明文xml包中保持一致
             //包序列号与xml包中保持一致
-            String sPackageID = "1111145111111111";
+            String sPackageID = "11111459111111111";
             //交易代码
             String sTransCode = "PAYENT";
             //银行编码
