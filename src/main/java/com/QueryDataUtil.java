@@ -24,7 +24,8 @@ public class QueryDataUtil {
     }
 
     public static String FORMAT_FULL_XML = "yyyyMMddHHmmssSSS";
-    public static String NCIp = "192.168.0.115";
+    public static String NCIp = "10.193.48.105";
+//    public static String NCIp = "192.168.0.115";
     public static String NCPort = "7070";
     public static String NCPort2 = "7080";
     public static String postResult = null;
@@ -134,6 +135,7 @@ public class QueryDataUtil {
                     postResult = postResult.substring(8);
                     byte[] decodeResult = getFromBASE64(postResult);
                     postResult = new String(decodeResult, sCoding);
+                    System.out.println(postResult);
                 }
                 String dateStr = postResult.split("<LastTranDate>")[1];
                 String date = dateStr.substring(0, 10).replace("-", "");

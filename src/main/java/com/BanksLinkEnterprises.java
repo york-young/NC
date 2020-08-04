@@ -8,6 +8,7 @@ import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.security.Signature;
 
 import static com.QueryDataUtil.*;
 
@@ -263,7 +264,7 @@ public class BanksLinkEnterprises {
      * @Param: [sContentSign]
      * @Return: java.lang.String
      **/
-    public String Signature(String sContentSign) throws Exception {
+    public static String Signature(String sContentSign) throws Exception {
         java.net.URL aURL = new java.net.URL("http://" + NCIp + ":" + NCPort2);
         //打开和URL之间的连接
         java.net.HttpURLConnection urlConnection = (java.net.HttpURLConnection) aURL.openConnection();
@@ -348,5 +349,10 @@ public class BanksLinkEnterprises {
         return null;
     }
 
+    public static void main(String[] args) throws Exception {
+        String s=Signature("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+        
+
+    }
 
 }
