@@ -16,6 +16,7 @@ import java.util.Random;
  */
 
 public class QueryDataUtil {
+
     public static void main(String[] args) {
         System.out.println(queryDateUtil());
         //System.out.println(getRetCode(postResult));
